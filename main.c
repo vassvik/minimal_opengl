@@ -39,6 +39,7 @@ int main() {
     }
     glfwMakeContextCurrent(window); 
 
+    glfwSwapInterval(1);
 
     /////////////////////////////////////////////////////////////////////////////////
     // initialize GLAD
@@ -88,10 +89,42 @@ int main() {
     /////////////////////////////////////////////////////////////////////////////////
     // main drawing routine
     glClearColor(3.0/255, 72/255.0, 133/255.0, 0.0f);
+    
+    double t1 = glfwGetTime();
+
+    double dt_avg = 0.0;  // first moment
+    double dt_avg2 = 0.0; // second moment
+
+    int frames_to_avg = 100;
+    int frame_ctr = 0;
+    glfwSwapInterval(1);
+    while ( !glfwWindowShouldClose(window)) {
+        double t2 = glfwGetTime();
+        double dt = t2 - t1;
+        t1 = t2;
+
+        dt_avg += dt;
+        dt_avg2 += dt*dt;
+        frame_ctr++;
+
+        if (frame_ctr == frames_to_avg) {
+            dt_avg /= frames_to_avg;
+            dt_avg2 /= frames_to_avg;
+            double dt_ste = sqrt(dt_avg2 - dt_avg*dt_avg)/sqrt(frames_to_avg);
+
+            char str[64];
+            sprintf(str, "time frame = %.3fms +/- %.4fms, fps = %.1f, %d frames", 
+                         1000.0*dt_avg, 1000.0*dt_ste, 1.0/dt_avg, frames_to_avg);
+            glfwSetWindowTitle(window, str);
+
+            frames_to_avg = (int)(1.0/dt_avg); // this should make it update approximitely once per second
+
+            dt_avg = 0.0;
+            dt_avg2 = 0.0;
+            frame_ctr = 0;
+        }
 
 
-
-    while ( !glfwWindowShouldClose(window)) {   
         /////////////////////////////////////////////////////////////////////////////////
         // listen for input
         glfwPollEvents();
