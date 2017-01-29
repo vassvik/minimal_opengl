@@ -142,8 +142,8 @@ int main() {
         glUseProgram(programID);
         glBindVertexArray(VertexArrayID); // tells the program which vertex data we want to use (like glVertex, but referencing all at once)
 
-		glUniform1f(glGetUniformLocation(programID, "time"), glfwGetTime());
-		glUniform2f(glGetUniformLocation(programID, "resolution"), resx, resy);
+        glUniform1f(glGetUniformLocation(programID, "time"), glfwGetTime());
+        glUniform2f(glGetUniformLocation(programID, "resolution"), resx, resy);
 
         glDrawArrays(GL_TRIANGLES, 0, 3); // start at index 0, and draw 3 vertices, interpreted as GL_TRIANGLES
         
