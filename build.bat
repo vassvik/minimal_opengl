@@ -1,0 +1,1 @@
+cl /nologo /Tc main.c /Iinclude lib/glfw3dll.lib && main.exe
